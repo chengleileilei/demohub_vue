@@ -1,0 +1,5 @@
+{
+    "base_url": "http://10.126.62.57:5000/",
+    "image_file_name": "images",
+    "source_image_api": "sourceimage"
+}
