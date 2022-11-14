@@ -149,7 +149,7 @@ import configData from "@/assets/config.json";
 import ShowArea from "@/components/modelComponents/ShowArea.vue";
 
 export default {
-  name: "objectdetection",
+  name: "segmentation",
   props: ["modelData"],
   components: { ShowArea },
 

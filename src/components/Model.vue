@@ -74,7 +74,10 @@ export default {
     image_processing: () =>
       import("@/components/modelComponents/ImageProcess.vue"),
     object_detection:()=>
-    import("@/components/modelComponents/ObjectDetection.vue")
+    import("@/components/modelComponents/ObjectDetection.vue"),
+    segmentation:()=>
+        import("@/components/modelComponents/Segmentation.vue"),
+
   },
   data() {
     return {

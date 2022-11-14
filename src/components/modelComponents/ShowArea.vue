@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="5">
     <el-col
-      :xs="12"
+      :xs="8"
       :sm="8"
       :md="4"
       :lg="4"
@@ -9,16 +9,16 @@
       v-for="(imageUrl, index) in showImages"
       :key="index"
     >
-      <div class="show-image-wrap" v-if="index<6">
-      <img
-        :src="baseUrl + 'absimage?path=' + imageUrl"
-        alt=""
-        class="show-image"
-        @click="addShowImage(baseUrl + 'absimage?path=' + imageUrl)"
-    />
+      <div class="show-image-wrap" v-if="index < 6">
+        <img
+          :src="baseUrl + 'absimage?path=' + imageUrl"
+          alt=""
+          class="show-image"
+          @click="addShowImage(baseUrl + 'absimage?path=' + imageUrl)"
+        />
       </div>
-</el-col>
- <!-- <el-col
+    </el-col>
+    <!-- <el-col
       :xs="12"
       :sm="8"
       :md="4"
@@ -43,15 +43,15 @@ export default {
       baseUrl: configData.base_url,
     };
   },
-  methods:{
-    addClick(){
-      this.$eventBus.$emit('addClick')
+  methods: {
+    addClick() {
+      this.$eventBus.$emit("addClick");
       // console.log("ShowArea was clicked!")
     },
-    addShowImage(showImageUrl){
-            this.$eventBus.$emit('addShowImage',showImageUrl)
-    }
-  }
+    addShowImage(showImageUrl) {
+      this.$eventBus.$emit("addShowImage", showImageUrl);
+    },
+  },
 };
 </script>
 
@@ -66,28 +66,31 @@ export default {
   overflow: hidden;
   justify-content: center;
   opacity: 0.9;
-border-radius: 16px;
+    border-radius: 10px;
+
 }
-.add-wrap{
+.show-image-wrap img{
+  border-radius: 10px;
+}
+.add-wrap {
   cursor: pointer;
   margin-top: 5px;
   height: 80px;
-  background-color: #f4f4f4;;
+  background-color: #f4f4f4;
   display: flex;
   overflow: hidden;
   justify-content: center;
   align-items: center;
   border-radius: 16px;
-
 }
-.add-wrap::before{
+.add-wrap::before {
   position: absolute;
   content: "";
   height: 30px;
   width: 6px;
   background-color: black;
 }
-.add-wrap::after{
+.add-wrap::after {
   position: absolute;
   content: "";
   height: 6px;

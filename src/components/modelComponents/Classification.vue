@@ -55,7 +55,11 @@
           <p v-show="isLoading2">uploading......</p>
           <p v-if="falseShow">False！</p>
 
-          <div v-for="(item, index) in modelResult" :key="index">
+          <div
+            v-for="(item, index) in modelResult"
+            :key="index"
+            v-show="modelResult != ''"
+          >
             <div class="result-item-percentage">
               <div
                 class="item-bar"
@@ -201,14 +205,14 @@ export default {
       var pic1 = file.value; //获取input框的值，文件路径
       strs = pic1.split("."); //分成数组存储
       var suffix = strs[strs.length - 1]; //获取文件后缀
+      suffix = suffix.toLowerCase();
 
       if (
         suffix != "jpg" &&
         suffix != "gif" &&
-        suffix != "jpeg" &&
-        suffix != "png"
+        suffix != "jpeg" 
       ) {
-        alert("您选择的不是图片，请上传一个图片"); //不是图片，做处理
+        alert("仅支持jpg、jpeg、gif格式图片！"); //不是图片，做处理
         return false;
       }
       var fileSize = 0; //文件大小默认为0
@@ -261,7 +265,8 @@ export default {
       (this.imageUrl = ""), (this.$refs.filebutton.value = "");
       this.isLoading = false;
       this.isLoading2 = false;
-      // this.modelResult = "";
+      this.modelResult = "";
+      this.falseShow = false;
     },
     submit() {
       if (this.imageUrl == "") {
@@ -270,7 +275,7 @@ export default {
           type: "warning",
         });
       } else {
-        this.falseShow = false
+        this.falseShow = false;
         this.isLoading2 = true;
         this.modelResult = "";
         let post_data = {
@@ -289,10 +294,10 @@ export default {
           .post(this.baseUrl + "submit", post_data)
           .then((res) => {
             // if(res.data)
-            
+
             this.modelResult = eval(res.data);
-            if (this.modelResult == false){
-              this.falseShow = true
+            if (this.modelResult == false) {
+              this.falseShow = true;
             }
             console.log("res=>", res);
             this.isLoading2 = false;

@@ -184,6 +184,7 @@ export default {
       var pic1 = file.value; //获取input框的值，文件路径
       strs = pic1.split("."); //分成数组存储
       var suffix = strs[strs.length - 1]; //获取文件后缀
+      suffix = suffix.toLowerCase()
 
       if (
         suffix != "jpg" &&
