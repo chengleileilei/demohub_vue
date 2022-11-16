@@ -21,12 +21,12 @@ Vue.prototype.$eventBus = new Vue()
 import axios from 'axios';
 Vue.prototype.$axios = axios;
 
-
-
 Vue.config.productionTip = false
 Vue.use(ElementUI)
+    // Vue.use(Element, { i18n: (key, value) => i18n.t(key, value), size: globalComponentSize });
 
-// Vue.use(Element, { i18n: (key, value) => i18n.t(key, value), size: globalComponentSize });
+import publicFun from './publicFun'
+Vue.use(publicFun)
 
 
 /* eslint-disable no-new */
