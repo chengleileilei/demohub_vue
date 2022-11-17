@@ -80,7 +80,7 @@
             </p>
           </div>
           <!-- {{JSON.parse(modelResult)}} -->
-          <div class="text-res">
+          <div class="text-res" v-show="modelResult != ''">
             <p>
               {{ modelResult }}
             </p>
