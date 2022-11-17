@@ -54,7 +54,9 @@
       >
         <p class="model-inout-tittle">{{ $t("message.result") }}</p>
         <div>
-          <p v-show="isLoading2">uploading......</p>
+          <!-- <p v-show="isLoading2">uploading......</p> -->
+          <LoadingAnimationVue v-show="isLoading2"></LoadingAnimationVue>
+
           <img
             :src="targetImageUrl"
             v-show="targetImageUrl != ''"
@@ -147,11 +149,13 @@
 <script>
 import configData from "@/assets/config.json";
 import ShowArea from "@/components/modelComponents/ShowArea.vue";
+import LoadingAnimationVue from "./LoadingAnimation.vue";
+
 
 export default {
   name: "imageprocess",
   props: ["modelData"],
-  components: { ShowArea },
+  components: { ShowArea,LoadingAnimationVue },
 
   data() {
     return {

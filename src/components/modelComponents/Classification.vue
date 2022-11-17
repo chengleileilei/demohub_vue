@@ -52,7 +52,9 @@
       >
         <p class="model-inout-tittle">{{ $t("message.result") }}</p>
         <div>
-          <p v-show="isLoading2">uploading......</p>
+          <!-- <p v-show="isLoading2">uploading......</p> -->
+          <LoadingAnimationVue v-show="isLoading2"></LoadingAnimationVue>
+
           <p v-if="falseShow">False！</p>
 
           <div
@@ -70,7 +72,7 @@
                 "
               ></div>
               <p>
-                {{ String(item.split(" ").slice(-1)).slice(0, 4) }}
+                {{ String(Number(item.split(" ").slice(-1))).slice(0, 4) }}
               </p>
             </div>
             <p class="result-item-type">
@@ -78,6 +80,11 @@
             </p>
           </div>
           <!-- {{JSON.parse(modelResult)}} -->
+          <div class="text-res">
+            <p>
+              {{ modelResult }}
+            </p>
+          </div>
         </div>
         <!-- <img :src="imageUrl" alt="" /> -->
       </el-col>
@@ -166,13 +173,14 @@
 <script>
 import configData from "@/assets/config.json";
 import ShowArea from "@/components/modelComponents/ShowArea.vue";
+import LoadingAnimationVue from "./LoadingAnimation.vue";
 
 // import eventBus from "@/assets/eventBus.js";
 
 export default {
   name: "classification",
   props: ["modelData"],
-  components: { ShowArea },
+  components: { ShowArea, LoadingAnimationVue },
   data() {
     return {
       baseUrl: configData.base_url,
@@ -391,6 +399,19 @@ export default {
 .result-item-percentage {
   margin-top: 10px;
   white-space: nowrap;
+}
+.text-res {
+  margin-top: 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+}
+.text-res > p {
+  font-size: 15px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: #333333;
+  line-height: 20px;
 }
 .input-wrap > img {
   height: 90px;
