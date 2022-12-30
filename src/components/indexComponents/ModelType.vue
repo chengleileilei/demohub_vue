@@ -6,7 +6,7 @@
       class="type-tittle-wrap"
       v-if="JSON.stringify(this.$route.params) == '{}'"
     >
-      <div class="type-tittle">
+      <div class="type-tittle" @click="routerTo('/model/' + type)">
         <p>{{ typeData.name[this.$i18n.locale] }}</p>
       </div>
       <div class="type-more" @click="routerTo('/model/' + type)">
@@ -91,6 +91,7 @@ export default {
 .model-type-wrap {
 }
 .type-tittle-wrap {
+  cursor: pointer;
   display: flex;
   flex-direction: row;
   align-items: center;

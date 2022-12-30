@@ -17,7 +17,7 @@
     <div class="main-wrap">
       <MyIntro
         v-if="allData != ''"
-        :introData="allData.index.introduction"
+        :introData="allData['model_type'][modelType]['introduction']"
         class="intro-index"
       ></MyIntro>
       <!-- {{ modelType }} -->

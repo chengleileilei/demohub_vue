@@ -7,12 +7,13 @@
             <p class="footer-tittle">
               {{ $t("footer.authors") }}
             </p>
-
-            <div class="footer-content">
-              <p>{{ $t("footer.huang") }}</p>
-              <p>{{ $t("footer.wang") }}</p>
-              <p>{{ $t("footer.cheng") }}</p>
-              <p>{{ $t("footer.sang") }}</p>
+            <div class="footer-content" v-if="footerData != ''">
+              <a
+                :href="getUrl(data.url)"
+                v-for="(data, index) in footerData.authors"
+                :key="index"
+                >{{ data.name[$i18n.locale] }}</a
+              >
             </div>
           </el-col>
 
@@ -20,9 +21,8 @@
             <p class="footer-tittle">
               {{ $t("footer.useful_link") }}
             </p>
-            <div class="footer-content" v-if="footerData!=''">
+            <div class="footer-content" v-if="footerData != ''">
               <a
-              
                 :href="data.url"
                 v-for="(data, index) in footerData.useful_links"
                 :key="index"
@@ -31,7 +31,15 @@
             </div>
           </el-col>
 
-          <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8" class="footer-box" v-if="footerData!=''">
+          <el-col
+            :xs="24"
+            :sm="12"
+            :md="8"
+            :lg="8"
+            :xl="8"
+            class="footer-box"
+            v-if="footerData != ''"
+          >
             <p class="footer-tittle">
               {{ $t("footer.contact") }}
             </p>
@@ -47,6 +55,18 @@
               <p>{{ $t("footer.email") }}: {{ footerData.email }}</p>
             </div>
           </el-col>
+          <el-col
+            :xs="24"
+            :sm="24"
+            :md="24"
+            :lg="24"
+            :xl="24"
+            class="footer-icp"
+          >
+            <div class="footer-content" v-if="footerData != ''">
+              <p>{{footerData.icp}}</p>
+            </div>
+          </el-col>
         </div>
       </el-col>
     </el-row>
@@ -57,20 +77,30 @@
 export default {
   data() {
     return {
-      allData: '',
-      usefulLinkData :'',
-      footerData : ''
+      allData: "",
+      usefulLinkData: "",
+      footerData: "",
     };
   },
   created() {
     this.$eventBus.$on("allData", (data) => {
       this.allData = data;
-            this.footerData = this.allData.footer
+      this.footerData = this.allData.footer;
 
       // this.usefulLinkData = this.allData.footer.useful_links
-      
     });
   },
+  methods:{
+    getUrl(url){
+      if(url==''){
+        return "#"
+      }
+      else{
+        return url
+      }
+
+    }
+  }
 };
 </script>
 
@@ -84,7 +114,7 @@ export default {
   font-size: 18px;
 }
 .footer {
-  padding: 20px 10px;
+  padding: 20px 10px 5px 10px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -98,6 +128,12 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
+}
+.footer-icp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .footer-tittle {
   margin-bottom: 15px;
@@ -114,6 +150,7 @@ export default {
   margin-bottom: 10px;
 }
 .footer-content > a {
+  display: block;
   font-size: 14px;
   font-family: Arial;
   font-weight: 400;

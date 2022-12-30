@@ -157,7 +157,9 @@
               v-for="(typeData, typeKey) in menuData[menuCurrentType].models"
               :key="typeKey"
               class="menu-tag-wrap model-tag-wrap"
-              @click="routerTo('/model/' + menuCurrentType + '/' + typeKey)"
+              @click="
+                routerTo('/model/' + menuCurrentType + '/' + typeKey)
+              "
             >
               <p>
                 {{ typeData.name[$i18n.locale] }}
@@ -252,11 +254,7 @@ export default {
       this.queryData();
     },
     searchButton() {
-
-
-      if (
-        this.searchResult.length == 0
-      ) {
+      if (this.searchResult.length == 0) {
         this.routerTo("/nodata");
         this.cleanSearch();
       } else {
@@ -288,26 +286,29 @@ export default {
         this.searchResult = list;
       }
     },
-    // reset() {
-    //   this.orgList = JSON.parse(JSON.stringify(this.normal));
-    // },
 
     // menu
     menuShow() {
+      console.log("menuShow");
       this.menuIsShow = true;
-      // console.log("show is run");
     },
     menuShow2() {
+      console.log("menuShow2");
       clearInterval(this.timer);
-      // this.menuIsShow2 = true;
-      // console.log("show2 is run");
     },
     menuHide() {
+      console.log("menuHide");
       var that = this;
       this.timer = setTimeout(() => {
         // 需要执行的代码
         that.menuIsShow = false;
       }, 200);
+    },
+    menuHideNow() {
+      console.log("menuHideNow");
+
+      this.menuIsShow = false;
+      // clearInterval(this.timer);
     },
   },
 

@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <!-- {{model}} -->
-    <div class="image-wrap">
+    <div class="image-wrap" @click="routerTo()">
       <div class="card-image">
         <img
           :src="baseUrl + 'absimage?path=' + modelData.input_image_name"
@@ -110,6 +110,7 @@ export default {
   margin-bottom: 40px;
 }
 .image-wrap {
+  cursor: pointer;
   display: flex;
   flex-direction: row;
   border-radius: 8px;
