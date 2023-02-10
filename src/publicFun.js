@@ -10,7 +10,8 @@ exports.install = function(Vue, options) {
             if (
                 suffix != "jpg" &&
                 suffix != "gif" &&
-                suffix != "jpeg"
+                suffix != "jpeg" &&
+                suffix != "png"
             ) {
                 alert("仅支持jpg、jpeg、gif格式图片！"); //不是图片，做处理
                 return false;

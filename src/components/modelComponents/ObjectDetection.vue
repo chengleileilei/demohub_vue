@@ -74,7 +74,7 @@
       :gutter="10"
       v-if="
         JSON.stringify(modelData.args) != '{}' &&
-        typeof(modelData.args) != 'undefined'
+        typeof modelData.args != 'undefined'
       "
       class="arg-background"
     >
@@ -130,7 +130,7 @@
         <a
           href="javascript:void(0);"
           class="clear upload-btn"
-          @click="imageClear()"
+          @click="imageClear(), stopAxios()"
           >{{ $t("message.clear") }}</a
         >
       </el-col>
@@ -138,6 +138,7 @@
         <a
           href="javascript:void(0);"
           class="submit upload-btn"
+          :class="{ 'submit-forbidden': isLoading2 == true }"
           @click="submit()"
           >{{ $t("message.submit") }}</a
         >
@@ -151,11 +152,10 @@ import configData from "@/assets/config.json";
 import ShowArea from "@/components/modelComponents/ShowArea.vue";
 import LoadingAnimationVue from "./LoadingAnimation.vue";
 
-
 export default {
   name: "objectdetection",
   props: ["modelData"],
-  components: { ShowArea ,LoadingAnimationVue},
+  components: { ShowArea, LoadingAnimationVue },
 
   data() {
     return {
@@ -182,7 +182,7 @@ export default {
     // imageLoad() {
     //   this.isLoading = false;
     // },
-   
+
     fileChange() {
       if (this.imageVerification(this.$refs.filebutton)) {
         this.isLoading = true;
@@ -219,6 +219,9 @@ export default {
         // console.log("图片校验失败！");
       }
     },
+    stopAxios() {
+      this.source.cancel("Operation canceled by the user.");
+    },
     imageClear() {
       (this.imageUrl = ""), (this.$refs.filebutton.value = "");
       this.isLoading = false;
@@ -248,17 +251,18 @@ export default {
             this.modelData.args[arg_name]["default"];
         }
         // console.log(post_data["local_image_url"]);
+        this.CancelToken = this.$axios.CancelToken;
+        this.source = this.CancelToken.source();
         this.$axios
-          .post(this.baseUrl + "submit", post_data)
+          .post(this.baseUrl + "submit", post_data, {
+            cancelToken: this.source.token,
+          })
           .then((res) => {
-            console.log('kkkkres:',res)
+            console.log("kkkkres:", res);
             let target_url = res.data[res.data.length - 1];
             target_url = target_url.split(" ");
             target_url = target_url[target_url.length - 1];
-            target_url =
-              this.baseUrl +
-              "absimage?path=" +
-              target_url;
+            target_url = this.baseUrl + "absimage?path=" + target_url;
             this.targetImageUrl = target_url;
             this.isLoading2 = false;
           })
@@ -395,6 +399,12 @@ export default {
   box-shadow: 0px 10px 16px 0px rgba(254, 179, 0, 0.3);
   border-radius: 8px;
   margin-bottom: 20px;
+}
+.submit-forbidden {
+  color: #696868;
+  pointer-events: none;
+  background: #a8a8a6;
+  box-shadow: 0px 10px 16px 0px rgba(126, 125, 124, 0.3);
 }
 .arg-wrap {
   max-width: 350px;
