@@ -4,70 +4,40 @@
     v-if="JSON.stringify(argsData) != '{}'"
     class="arg-background"
   >
-    {{ postData }}
-    {{ funData }}
-    <el-row v-for="(arg_data, arg_type) in argsData" :key="arg_type">
-      <h2>{{ arg_type }}:</h2>
-      <!-- {{ arg_data }} -->
-
-      function:<el-select v-model="postData[arg_type]" placeholder="请选择">
-        <el-option
-          v-for="(arg_item, arg_key) in arg_data"
-          :key="arg_key"
-          :label="arg_key"
-          :value="arg_key"
-        >
-        </el-option>
-      </el-select>
-
-      <el-col
-        :xs="24"
-        :sm="24"
-        :md="24"
-        :lg="24"
-        :xl="24"
-        v-for="(arg_item, arg_key) in arg_data[postData[arg_type]]"
+    <!-- {{argsData}} -->
+    <p class="args-tittle">function:</p>
+    <el-select
+      v-model="funName"
+      placeholder="请选择函数"
+      @change="selectChange()"
+      class="args-bottom"
+    >
+      <el-option
+        v-for="(arg_item, arg_key) in argsData"
         :key="arg_key"
+        :label="arg_key"
+        :value="arg_key"
       >
-      {{arg_item}}
-        <!-- {{arg_key}}##{{arg_item}}** -->
-        <div class="arg-wrap">
-          <p>{{ arg_key }}:</p>
+      </el-option>
+    </el-select>
 
-          <el-select
-            v-if="arg_item.type == 'select'"
-            v-model="funData[postData[arg_type]][arg_key]"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in arg_item.values"
-              :key="item"
-              :label="item"
-              :value="item"
-            >
-            </el-option>
-          </el-select>
+    <p class="args-tittle">function args:</p>
+    <el-input
+      type="textarea"
+      :autosize="{ minRows: 1, maxRows: 3 }"
+      placeholder="请输入函数参数"
+      v-model="postData"
+      class="args-bottom"
+      @change="inputChange()"
+    >
+    </el-input>
 
-          <el-input-number
-            v-if="arg_item.type == 'int'"
-            v-model="funData[postData[arg_type]][arg_key]"
-            :precision="0"
-            :step="1"
-            :min="Math.min.apply(null, arg_item.values)"
-            :max="Math.max.apply(null, arg_item.values)"
-          ></el-input-number>
-
-          <el-input-number
-            v-if="arg_item.type == 'float'"
-            v-model="funData[postData[arg_type]][arg_key]"
-            :precision="2"
-            :step="0.1"
-            :min="Math.min.apply(null, arg_item.values)"
-            :max="Math.max.apply(null, arg_item.values)"
-          ></el-input-number>
-        </div>
-      </el-col>
-    </el-row>
+    <p class="args-tittle" v-if="funName != ''">function infomation:</p>
+    <div v-if="funName != ''">
+      <p class="fun-info-wrap">
+        {{ argsData[funName].doc }}
+      </p>
+    </div>
   </el-row>
 </template>
 
@@ -77,21 +47,44 @@ export default {
   props: ["argsData"],
   data() {
     return {
-      postData: {},
-      funData: {},
+      funName: "",
+      postData: "",
     };
   },
-  created() {
-    for (var arg_type in this.argsData) {
-      // console.log(this.argsData[arg_type])
-      for (var arg_key in this.argsData[arg_type]) {
-        this.funData[arg_key] = {};
-        // for (var arg in this.argsData[arg_type][arg_key]) {
-        //   this.funData[arg_key][arg] = 0;
-        // }
+  methods: {
+
+    // 组件间通信
+    transferArgData(trans_data) {
+      this.$eventBus.$emit("transferArgData", trans_data);
+      console.log("changed");
+    },
+
+    // 更新postData
+    updataPostData() {
+      var varstr = "";
+      for (var key in this.argsData[this.funName].args) {
+        varstr +=
+          key + "=" + this.argsData[this.funName].args[key].default + ", ";
       }
+      varstr = varstr.substring(0, varstr.length - 2);
+      this.postData = varstr;
+    },
+
+    selectChange() {
+      this.updataPostData();
+      this.transferArgData({ funName: this.funName, postData: this.postData });
+    },
+
+    inputChange() {
+      this.transferArgData({ funName: this.funName, postData: this.postData });
+    },
+  },
+  created() {
+    for (var item in this.argsData) {
+      this.funName = item;
+      break;
     }
-    console.log(this.funData);
+    this.updataPostData();
   },
 };
 </script>
@@ -102,5 +95,18 @@ export default {
   padding: 20px;
   background: #ffffff;
   border-radius: 16px;
+}
+.args-tittle {
+  font-size: 22px;
+  font-weight: bold;
+}
+.args-bottom {
+  margin-bottom: 20px;
+}
+.fun-info-wrap {
+  white-space: pre-wrap;
+  padding: 10px;
+  max-height: 300px;
+  overflow: auto;
 }
 </style>

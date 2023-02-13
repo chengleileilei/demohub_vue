@@ -83,8 +83,10 @@
           @click="submit()"
           >{{ $t("message.submit") }}</a
         >
+
       </el-col>
     </el-row>
+
   </div>
 </template>
 
@@ -107,6 +109,7 @@ export default {
       isLoading: false,
       isLoading2: false,
       modelResult: "",
+      argData:""
     };
   },
   methods: {
@@ -185,10 +188,15 @@ export default {
           classname: this.modelData.modelType,
           demoname: this.modelData.modelId,
         };
-        for (var arg_name in this.modelData.args) {
-          post_data["args"][arg_name] =
-            this.modelData.args[arg_name]["default"];
-        }
+        // 构造模型参数
+        post_data["args"]['funName'] = this.argData['funName']
+        post_data["args"]["funArgs"] = '\"' + this.argData['postData'] + '\"'
+
+
+        // for (var arg_name in this.modelData.args) {
+        //   post_data["args"][arg_name] =
+        //     this.modelData.args[arg_name]["default"];
+        // }
         // console.log(post_data["local_image_url"]);
         this.CancelToken = this.$axios.CancelToken;
         this.source = this.CancelToken.source();
@@ -250,6 +258,9 @@ export default {
       that.imageUrl = data;
       console.log(data); // 打印结果 = '传递的参数'
     });
+    this.$eventBus.$on("transferArgData",function(trans_data){
+      that.argData = trans_data
+    })
   },
 };
 </script>
