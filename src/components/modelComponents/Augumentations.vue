@@ -10,7 +10,11 @@
         class="model-left-wrap"
       >
         <p class="model-inout-tittle">{{ $t("message.input_image") }}</p>
-        <img :src="imageUrl" alt="" class="source-image" />
+        <!-- <img :src="imageUrl" alt="" class="source-image" /> -->
+        
+        <vue-viewer v-show="imageUrl!=''" :thumb="imageUrl" :full="imageUrl" class="source-image">
+        </vue-viewer>
+
         <div
           id="drop-area"
           class="input-wrap"
@@ -51,16 +55,15 @@
         <p class="model-inout-tittle">{{ $t("message.result") }}</p>
         <div>
           <LoadingAnimationVue v-show="isLoading2"></LoadingAnimationVue>
-
-          <img
+        <vue-viewer v-show="targetImageUrl!=''" :thumb="targetImageUrl" :full="targetImageUrl" class="source-image">
+        </vue-viewer>
+          <!-- <img
             :src="targetImageUrl"
             v-show="targetImageUrl != ''"
             alt=""
             class="source-image"
-          />
-          <!-- {{ modelResult }} -->
+          /> -->
         </div>
-        <!-- <img :src="imageUrl" alt="" /> -->
       </el-col>
     </el-row>
 
@@ -83,10 +86,8 @@
           @click="submit()"
           >{{ $t("message.submit") }}</a
         >
-
       </el-col>
     </el-row>
-
   </div>
 </template>
 
@@ -109,7 +110,7 @@ export default {
       isLoading: false,
       isLoading2: false,
       modelResult: "",
-      argData:""
+      argData: "",
     };
   },
   methods: {
@@ -189,9 +190,8 @@ export default {
           demoname: this.modelData.modelId,
         };
         // 构造模型参数
-        post_data["args"]['funName'] = this.argData['funName']
-        post_data["args"]["funArgs"] = '\"' + this.argData['postData'] + '\"'
-
+        post_data["args"]["funName"] = this.argData["funName"];
+        post_data["args"]["funArgs"] = '"' + this.argData["postData"] + '"';
 
         // for (var arg_name in this.modelData.args) {
         //   post_data["args"][arg_name] =
@@ -258,9 +258,9 @@ export default {
       that.imageUrl = data;
       console.log(data); // 打印结果 = '传递的参数'
     });
-    this.$eventBus.$on("transferArgData",function(trans_data){
-      that.argData = trans_data
-    })
+    this.$eventBus.$on("transferArgData", function (trans_data) {
+      that.argData = trans_data;
+    });
   },
 };
 </script>
@@ -312,11 +312,21 @@ export default {
   font-weight: 400;
   color: #333333;
 }
-.source-image {
+/* .source-image {
+  display: block;
   margin-top: 15px;
   width: 100%;
   border-radius: 16px;
+} */
+.source-image>img{
+  margin-top: 15px;
+  width: 100%;
+  border-radius: 16px;
+  height: auto;
+  margin:0;
+  cursor: zoom-in;
 }
+
 .upload-btn {
   text-align: center;
   display: inline-block;
@@ -374,3 +384,4 @@ export default {
   /* padding-left: 10px; */
 }
 </style>
+

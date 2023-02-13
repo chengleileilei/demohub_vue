@@ -14,7 +14,13 @@
         class="model-left-wrap"
       >
         <p class="model-inout-tittle">{{ $t("message.input_image") }}</p>
-        <img :src="imageUrl" alt="" class="source-image" />
+        <vue-viewer
+          v-show="imageUrl != ''"
+          :thumb="imageUrl"
+          :full="imageUrl"
+          class="source-image"
+        >
+        </vue-viewer>
         <div
           id="drop-area"
           class="input-wrap"
@@ -57,12 +63,13 @@
           <!-- <p v-show="isLoading2">uploading......</p> -->
           <LoadingAnimationVue v-show="isLoading2"></LoadingAnimationVue>
 
-          <img
-            :src="targetImageUrl"
+          <vue-viewer
             v-show="targetImageUrl != ''"
-            alt=""
+            :thumb="targetImageUrl"
+            :full="targetImageUrl"
             class="source-image"
-          />
+          >
+          </vue-viewer>
           <!-- {{ modelResult }} -->
         </div>
         <!-- <img :src="imageUrl" alt="" /> -->
@@ -364,10 +371,13 @@ export default {
   font-weight: 400;
   color: #333333;
 }
-.source-image {
+.source-image>img{
   margin-top: 15px;
   width: 100%;
   border-radius: 16px;
+  height: auto;
+  margin:0;
+  cursor: zoom-in;
 }
 .upload-btn {
   text-align: center;

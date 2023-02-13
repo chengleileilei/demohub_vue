@@ -4,7 +4,6 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
-// Vue.forceUpdate()
 
 // 简单store模式（小项目没必要用vuex）
 import store from './store/index.js';
@@ -24,6 +23,10 @@ Vue.prototype.$axios = axios;
 Vue.config.productionTip = false
 Vue.use(ElementUI)
     // Vue.use(Element, { i18n: (key, value) => i18n.t(key, value), size: globalComponentSize });
+
+// vue2-viewer
+import ImageViewer from 'vue2-viewer';
+Vue.use(ImageViewer);
 
 import publicFun from './publicFun'
 Vue.use(publicFun)
