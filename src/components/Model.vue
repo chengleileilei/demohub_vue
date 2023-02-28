@@ -20,11 +20,12 @@
       }}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="centered lr-padding">
-      <MyIntro
+      <!-- <MyIntro
         :introData="
           allData['model_type'][modelType]['models'][modelId]['introduction']
         "
-      ></MyIntro>
+      ></MyIntro> -->
+      <MyIntroTest :markData="introData"></MyIntroTest>
     </div>
 
     <div class="model-background">
@@ -41,45 +42,30 @@
         }"
         class="centered lr-padding"
       ></component>
-      <!-- <component
-        :is="currentView"
-        :modelData="modelData"
-        class="centered lr-padding"
-      ></component> -->
-
-      <!-- <ShowArea
-      :showImages="
-        allData['model_type'][modelType]['models'][modelId]['show_images']
-      "
-      class="centered lr-padding" 
-    ></ShowArea> -->
-
-      <!-- {{ allData }} -->
     </div>
   </div>
 </template>
 
 <script>
+import MyIntroTest from "@/components/indexComponents/IntroTest.vue";
 import configData from "@/assets/config.json";
 import MyIntro from "@/components/indexComponents/Intro.vue";
 import ShowArea from "@/components/modelComponents/ShowArea.vue";
-// import Classification from "@/components/modelComponents/Classification.vue";
 export default {
   name: "Model",
   components: {
+    MyIntroTest,
     MyIntro,
     ShowArea,
     classification: () =>
       import("@/components/modelComponents/Classification.vue"),
     image_processing: () =>
       import("@/components/modelComponents/ImageProcess.vue"),
-    object_detection:()=>
-    import("@/components/modelComponents/ObjectDetection.vue"),
-    segmentation:()=>
-        import("@/components/modelComponents/Segmentation.vue"),
-      augumentations:()=>
-        import("@/components/modelComponents/Augumentations.vue")
-
+    object_detection: () =>
+      import("@/components/modelComponents/ObjectDetection.vue"),
+    segmentation: () => import("@/components/modelComponents/Segmentation.vue"),
+    augumentations: () =>
+      import("@/components/modelComponents/Augumentations.vue"),
   },
   data() {
     return {
@@ -89,31 +75,22 @@ export default {
       modelId: this.$route.params.model_id,
       allData: this.$store.state.message,
       modelData: {},
+      introData: "",
     };
   },
   created() {
-    // this.$set(this.modelData, "modelType", this.modelType);
-    // this.$set(this.modelData, "modelId", this.modelId);
-    // this.$set(
-    //   this.modelData,
-    //   "condaEnv",
-    //   this.allData["model_type"][this.modelType]["models"][this.modelId]["conda_env"]
-    // );
-    // this.$set(
-    //   this.modelData,
-    //   "args",
-    //   this.allData["model_type"][this.modelType]["models"][this.modelId]["args"]
-    // );
-    // this.$set(
-    //   this.modelData,
-    //   "showImages",
-    //   this.allData["model_type"][this.modelType]["models"][this.modelId]["show_images"]
-    // );
-    // this.$set(this.modelData, "modelType", this.modelType);
-
-    // this.$nextTick(() => {
-    //   this.currentView = this.myComponents[this.$route.params.model_type];
-    // });
+    this.$axios
+      .get(this.baseUrl + "markdown", {
+        params: {
+          type: this.modelType,
+          model: this.modelId,
+        },
+      })
+      .then((response) => {
+        this.introData = response.data;
+        console.log(this.introData)
+        // console.log("Current model pageviews: ", response.data);
+      });
     // 更新模型访问量
     this.$axios
       .get(this.baseUrl + "pageviews", {

@@ -1,37 +1,28 @@
 <template>
-<el-row>
-
-
-  <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16" class="intro-wrap">
-    <!-- <div class="short-line"></div> -->
-    <!-- {{introData}} -->
-
-    <p class="intro-tittle">{{ introData.tittle[this.$i18n.locale] }}</p>
-    <div
-      v-for="(text, index) in introData.text[this.$i18n.locale]"
-      :key="index"
-    >
-      <p class="intro-text">
-        {{ text }}
-        <span v-show="introData.text.en.length == index + 1" v-if="getType(introData.link)!='undefined'">
-          <a :href="introData.link.url">{{ introData.link.text.en }}</a>
-        </span>
-      </p>
-    </div>
-  </el-col>
+  <el-row>
+    <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16" class="intro-wrap">
+      <!-- <div class="short-line"></div> -->
+      <div class="context" v-html="compiledMarkdown"></div>
+    </el-col>
   </el-row>
 </template>
 
 <script>
+import { marked } from "marked";
 export default {
   name: "myIntro",
-  props: ["introData"],
+  props: ["markData"],
   data() {
     return {};
   },
   methods: {
     getType(data) {
       return typeof data;
+    },
+  },
+  computed: {
+    compiledMarkdown() {
+      return marked.parse(this.markData);
     },
   },
 };
@@ -54,8 +45,6 @@ export default {
   margin-bottom: 20px;
 }
 .intro-tittle {
-
-
   font-size: 30px;
   font-family: Microsoft YaHei;
   font-weight: bold;

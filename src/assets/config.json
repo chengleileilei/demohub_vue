@@ -1,6 +1,8 @@
 {
     "bak_base_url": "http://10.126.62.57:5000/",
-    "base_url": "https://59.65.191.46:443/",
+    "base_url_old": "https://59.65.191.46:443/",
+    "base_url": "https://demohub.bjtu.edu.cn:443/",
+
 
     "image_file_name": "images",
     "source_image_api": "sourceimage"
