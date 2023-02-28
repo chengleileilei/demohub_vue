@@ -16,7 +16,6 @@
 <script>
 import MyIntro from "@/components/indexComponents/Intro.vue";
 import ModelType from "@/components/indexComponents/ModelType.vue";
-// import mockData from "@/assets/mockData/mockData.json";
 import configData from "@/assets/config.json";
 
 export default {
@@ -29,44 +28,20 @@ export default {
       baseUrl: configData.base_url,
     };
   },
-  methods: {
-    // 向header发送allData数据
-    // sendData(key,value) {
-    //   this.$eventBus.$emit(key,value);
-    // },
-  },
-  created() {
-    this.$axios
-      .get(this.baseUrl + "data")
-      .then((response) => {
-        this.allData = response.data;
-        (this.introData = this.allData.index.introduction),
-          console.log(this.allData["index"]["introduction"]);
-        this.$store.setMessageAction(this.allData);
-        // this.sendData("allData",this.allData)
-      })
-      .catch((err) => {
-        this.$message({
-          message: err,
-          type: "error",
-        });
-      });
 
-    // if (this.allData == null || JSON.stringify(this.allData) == "{}") {
-    //   this.$axios
-    //     .get(this.baseUrl + "data")
-    //     .then((response) => {
-    //       console.log(response);
-    //       this.allData = response.data;
-    //       this.$store.setMessageAction(this.allData);
-    //     })
-    //     .catch((err) => {
-    //       this.$message({
-    //         message: err,
-    //         type: "error",
-    //       });
-    //     });
-    // }
+  created() {
+    // 解决首次加载无数据问题
+    this.$eventBus.$on("allData", (data) => {
+      this.allData = data;
+      this.introData = this.allData.index.introduction;
+      this.$store.setMessageAction(this.allData);
+    });
+
+    if (this.allData == null || JSON.stringify(this.allData) == "{}") {
+      this.allData = this.$store.state.message;
+      this.introData = this.allData.index.introduction;
+      this.$store.setMessageAction(this.allData);
+    }
   },
 };
 </script>
