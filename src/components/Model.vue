@@ -25,7 +25,8 @@
           allData['model_type'][modelType]['models'][modelId]['introduction']
         "
       ></MyIntro> -->
-      <MyIntroTest :markData="introData"></MyIntroTest>
+      <!-- {{introData[$i18n.locale]}} -->
+      <MarkdownIntro :markdownData="introData[$i18n.locale]"></MarkdownIntro>
     </div>
 
     <div class="model-background">
@@ -47,14 +48,14 @@
 </template>
 
 <script>
-import MyIntroTest from "@/components/indexComponents/IntroTest.vue";
+import MarkdownIntro from "@/components/modelComponents/subComponents/MarkdownIntro.vue";
 import configData from "@/assets/config.json";
 import MyIntro from "@/components/indexComponents/Intro.vue";
 import ShowArea from "@/components/modelComponents/ShowArea.vue";
 export default {
   name: "Model",
   components: {
-    MyIntroTest,
+    MarkdownIntro,
     MyIntro,
     ShowArea,
     classification: () =>
@@ -87,8 +88,8 @@ export default {
         },
       })
       .then((response) => {
-        this.introData = response.data;
-        console.log(this.introData)
+        this.introData = response.data
+        console.log('introdata:',this.introData)
         // console.log("Current model pageviews: ", response.data);
       });
     // 更新模型访问量

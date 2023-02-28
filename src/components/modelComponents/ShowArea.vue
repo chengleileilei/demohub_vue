@@ -18,23 +18,11 @@
         />
       </div>
     </el-col>
-    <!-- <el-col
-      :xs="12"
-      :sm="8"
-      :md="4"
-      :lg="4"
-      :xl="4"
-    >
-      <div class="add-wrap" @click="addClick()">
-
-      </div>
-</el-col> -->
   </el-row>
 </template>
 
 <script>
 import configData from "@/assets/config.json";
-// import eventBus from "@/assets/eventBus.js";
 
 export default {
   props: ["showImages"],
@@ -46,7 +34,6 @@ export default {
   methods: {
     addClick() {
       this.$eventBus.$emit("addClick");
-      // console.log("ShowArea was clicked!")
     },
     addShowImage(showImageUrl) {
       this.$eventBus.$emit("addShowImage", showImageUrl);
@@ -66,10 +53,9 @@ export default {
   overflow: hidden;
   justify-content: center;
   opacity: 0.9;
-    border-radius: 10px;
-
+  border-radius: 10px;
 }
-.show-image-wrap img{
+.show-image-wrap img {
   border-radius: 10px;
 }
 .add-wrap {

@@ -1,8 +1,7 @@
 <template>
   <el-row>
     <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16" class="intro-wrap">
-      <!-- <div class="short-line"></div> -->
-      <div class="context" v-html="compiledMarkdown"></div>
+      <div v-if="markdownData!=null" class="context" v-html="compiledMarkdown"></div>
     </el-col>
   </el-row>
 </template>
@@ -10,8 +9,8 @@
 <script>
 import { marked } from "marked";
 export default {
-  name: "myIntro",
-  props: ["markData"],
+  name: "markdownIntro",
+  props: ["markdownData"],
   data() {
     return {};
   },
@@ -22,7 +21,7 @@ export default {
   },
   computed: {
     compiledMarkdown() {
-      return marked.parse(this.markData);
+      return marked.parse(this.markdownData);
     },
   },
 };

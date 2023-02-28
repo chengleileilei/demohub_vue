@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 // 简单的 store 模式
 let store = {
-    debug: true,
+    debug: false,
     state: window.sessionStorage.getItem('sharedState') ?
         JSON.parse(window.sessionStorage.getItem('sharedState')) : {
             message: {}

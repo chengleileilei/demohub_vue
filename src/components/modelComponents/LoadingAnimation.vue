@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    name:'loadingAnimation'
+  name: "loadingAnimation",
 };
 </script>
 
@@ -19,8 +19,8 @@ export default {
 }
 
 .imgCircle {
-    height: 40px;
-    width: 40px;
+  height: 40px;
+  width: 40px;
   animation: circle 1s linear infinite;
 }
 @keyframes circle {
