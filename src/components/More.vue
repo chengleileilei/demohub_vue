@@ -15,11 +15,13 @@
       }}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="main-wrap">
-      <MyIntro
-        v-if="allData != ''"
+      <MarkdownIntro :markdownData="introData[$i18n.locale]"></MarkdownIntro>
+
+      <!-- <MyIntro
+        v-if="allData != '' && allData != null"
         :introData="allData['model_type'][modelType]['introduction']"
         class="intro-index"
-      ></MyIntro>
+      ></MyIntro> -->
       <!-- {{ modelType }} -->
       <ModelType
         :typeData="allData.model_type[modelType]"
@@ -30,16 +32,21 @@
 </template>
 
 <script>
+import MarkdownIntro from "@/components/MarkdownIntro.vue";
 import MyIntro from "@/components/indexComponents/Intro.vue";
 import ModelType from "@/components/indexComponents/ModelType.vue";
+import configData from "@/assets/config.json";
 
 export default {
   name: "Index",
-  components: { MyIntro, ModelType },
+  components: { MyIntro, ModelType, MarkdownIntro },
   data() {
     return {
+      baseUrl: configData.base_url,
+
       allData: this.$store.state.message,
       modelType: this.$route.params.model_type,
+      introData: '',
     };
   },
   created() {
@@ -48,6 +55,17 @@ export default {
         this.allData = data;
       });
     }
+    this.$axios
+      .get(this.baseUrl + "markdown", {
+        params: {
+          type: this.modelType,
+        },
+      })
+      .then((response) => {
+        this.introData = response.data;
+        console.log("introdata:", this.introData);
+        // console.log("Current model pageviews: ", response.data);
+      });
   },
 };
 </script>

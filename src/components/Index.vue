@@ -37,6 +37,7 @@ export default {
       this.$store.setMessageAction(this.allData);
     });
 
+    // 需要等有数据后再请求，否则前端控制台报错
     if (this.allData == null || JSON.stringify(this.allData) == "{}") {
       this.allData = this.$store.state.message;
       this.introData = this.allData.index.introduction;

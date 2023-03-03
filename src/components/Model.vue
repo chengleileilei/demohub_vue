@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import MarkdownIntro from "@/components/modelComponents/subComponents/MarkdownIntro.vue";
+import MarkdownIntro from "@/components/MarkdownIntro.vue";
 import configData from "@/assets/config.json";
 import MyIntro from "@/components/indexComponents/Intro.vue";
 import ShowArea from "@/components/modelComponents/ShowArea.vue";
