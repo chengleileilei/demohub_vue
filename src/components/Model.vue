@@ -65,8 +65,8 @@ export default {
     object_detection: () =>
       import("@/components/modelComponents/ObjectDetection.vue"),
     segmentation: () => import("@/components/modelComponents/Segmentation.vue"),
-    augumentations: () =>
-      import("@/components/modelComponents/Augumentations.vue"),
+    augmentations: () =>
+      import("@/components/modelComponents/Augmentations.vue"),
   },
   data() {
     return {
