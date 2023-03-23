@@ -51,7 +51,7 @@
 import MarkdownIntro from "@/components/MarkdownIntro.vue";
 import configData from "@/assets/config.json";
 import MyIntro from "@/components/indexComponents/Intro.vue";
-import ShowArea from "@/components/modelComponents/ShowArea.vue";
+import ShowArea from "@/components/modelComponents/subComponents/ShowArea.vue";
 export default {
   name: "Model",
   components: {
@@ -67,6 +67,7 @@ export default {
     segmentation: () => import("@/components/modelComponents/Segmentation.vue"),
     augmentations: () =>
       import("@/components/modelComponents/Augmentations.vue"),
+    vbfi: () => import("@/components/modelComponents/Vbfi.vue"),
   },
   data() {
     return {
@@ -88,8 +89,8 @@ export default {
         },
       })
       .then((response) => {
-        this.introData = response.data
-        console.log('introdata:',this.introData)
+        this.introData = response.data;
+        console.log("introdata:", this.introData);
         // console.log("Current model pageviews: ", response.data);
       });
     // 更新模型访问量

@@ -156,8 +156,8 @@
 
 <script>
 import configData from "@/assets/config.json";
-import ShowArea from "@/components/modelComponents/ShowArea.vue";
-import LoadingAnimationVue from "./LoadingAnimation.vue";
+import ShowArea from "@/components/modelComponents/subComponents/ShowArea.vue";
+import LoadingAnimationVue from "@/components/modelComponents/subComponents/LoadingAnimation.vue";
 
 export default {
   name: "objectdetection",

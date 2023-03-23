@@ -4,7 +4,6 @@ import HelloWorld from '@/components/Index'
 import Model from '@/components/Model'
 import More from '@/components/More'
 import NoData from '@/components/searchComponents/NoSearchResult'
-import Load from '@/components/modelComponents/LoadingAnimation.vue'
 
 Vue.use(Router)
 

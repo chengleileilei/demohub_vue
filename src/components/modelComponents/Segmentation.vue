@@ -1,8 +1,5 @@
 <template>
   <div>
-    <!-- <h1>ip</h1>
-    <h2>{{ modelData.modelType }}->{{ modelData.modelId }}</h2> -->
-    <!-- <h1>{{ modelData }}</h1> -->
 
     <el-row class="show-wrap">
       <el-col
@@ -60,7 +57,6 @@
       >
         <p class="model-inout-tittle">{{ $t("message.result") }}</p>
         <div>
-          <!-- <p v-show="isLoading2">uploading......</p> -->
           <LoadingAnimationVue v-show="isLoading2"></LoadingAnimationVue>
 
           <vue-viewer
@@ -70,13 +66,10 @@
             class="source-image"
           >
           </vue-viewer>
-          <!-- {{ modelResult }} -->
         </div>
-        <!-- <img :src="imageUrl" alt="" /> -->
       </el-col>
     </el-row>
-    <!-- {{ typeof(modelData.args) }}
-    {{ modelData.args }} -->
+
     <el-row
       :gutter="10"
       v-if="
@@ -156,8 +149,8 @@
 
 <script>
 import configData from "@/assets/config.json";
-import ShowArea from "@/components/modelComponents/ShowArea.vue";
-import LoadingAnimationVue from "./LoadingAnimation.vue";
+import ShowArea from "@/components/modelComponents/subComponents/ShowArea.vue";
+import LoadingAnimationVue from "@/components/modelComponents/subComponents/LoadingAnimation.vue";
 
 export default {
   name: "segmentation",
