@@ -17,7 +17,7 @@ export default {
 
 <style>
 .iframe-container {
-	height:200px;
+	height:1200px;
 	overflow:hidden
 }
 .iframe-container * {

@@ -35,6 +35,7 @@
         :modelData="{
           modelType: modelType,
           modelId: modelId,
+          detialData: allData['model_type'][modelType]['models'][modelId],
           condaEnv:
             allData['model_type'][modelType]['models'][modelId]['conda_env'],
           args: allData['model_type'][modelType]['models'][modelId]['args'],
@@ -68,6 +69,8 @@ export default {
     augmentations: () =>
       import("@/components/modelComponents/Augmentations.vue"),
     vbfi: () => import("@/components/modelComponents/Vbfi.vue"),
+    digital_watermark: () =>
+      import("@/components/modelComponents/DigitalWaterMark.vue"),
   },
   data() {
     return {
