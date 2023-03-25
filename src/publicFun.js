@@ -61,5 +61,20 @@ exports.install = function(Vue, options) {
                 });
                 // console.log("图片校验失败！");
             }
+        },
+        Vue.prototype.imageClear = function(clearStrs = ['imageUrl', 'modelResult', 'targetImageUrl'],
+            clearRefNames = ['filebutton'],
+            clearLoadingTokens = ['isLoading', 'isLoading2']) {
+            for (let i in clearStrs) {
+                this[clearStrs[i]] = "";
+            }
+            for (let i in clearRefNames) {
+                this.$refs[clearRefNames[i]].value = "";
+            }
+            for (let i in clearLoadingTokens) {
+                this[clearLoadingTokens[i]] = false;
+            }
         }
+
+
 }

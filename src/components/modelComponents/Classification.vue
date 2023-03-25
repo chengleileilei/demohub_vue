@@ -44,7 +44,10 @@
           />
         </div>
         <ShowArea
-          :showImages="modelData['showImages']"
+          :showAreaData="{
+            images: modelData.detialData['show_images'],
+            bindName: 'imageUrl',
+          }"
           class="centered lr-padding"
         ></ShowArea>
       </el-col>
@@ -160,7 +163,9 @@
         <a
           href="javascript:void(0);"
           class="clear upload-btn"
-          @click="imageClear(), stopAxios()"
+          @click="imageClear(clearStrs = ['imageUrl', 'modelResult'],
+            clearRefNames = ['filebutton'],
+            clearLoadingTokens = ['isLoading', 'isLoading2']), stopAxios()"
           >{{ $t("message.clear") }}</a
         >
       </el-col>
@@ -216,14 +221,6 @@ export default {
       if (undefined != this.source) {
         this.source.cancel("Operation canceled by the user.");
       }
-    },
-    imageClear() {
-      // console.log("clear is called!!");
-      (this.imageUrl = ""), (this.$refs.filebutton.value = "");
-      this.isLoading = false;
-      this.isLoading2 = false;
-      this.modelResult = "";
-      this.falseShow = false;
     },
     submit() {
       if (this.imageUrl == "") {
@@ -307,10 +304,7 @@ export default {
       // console.log("father was called!"); // 打印结果 = '传递的参数'
     });
     this.$eventBus.$on("addShowImage", function (data) {
-      that.imageClear();
-
-      that.imageUrl = data;
-      console.log(data); // 打印结果 = '传递的参数'
+      that[data.bindName] = data.showImageUrl;
     });
   },
   beforedestroy() {

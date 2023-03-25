@@ -24,3 +24,5 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 TO DO :
 - showArea2组件适配
 - imageClear函数适配
+- clearImage函数添加拦截post请求
+- 

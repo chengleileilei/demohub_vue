@@ -6,7 +6,7 @@
       :md="4"
       :lg="4"
       :xl="4"
-      v-for="(imageUrl, index) in showAreaData.images"
+      v-for="(imageUrl, index) in showImages"
       :key="index"
     >
       <div class="show-image-wrap" v-if="index < 6">
@@ -25,7 +25,7 @@
 import configData from "@/assets/config.json";
 
 export default {
-  props: ["showAreaData"],
+  props: ["showImages"],
   data() {
     return {
       baseUrl: configData.base_url,
@@ -36,7 +36,7 @@ export default {
       this.$eventBus.$emit("addClick");
     },
     addShowImage(showImageUrl) {
-      this.$eventBus.$emit("addShowImage2", {bindName:this.showAreaData.bindName,showImageUrl:showImageUrl});
+      this.$eventBus.$emit("addShowImage", showImageUrl);
     },
   },
 };

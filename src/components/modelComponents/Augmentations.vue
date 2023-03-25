@@ -40,7 +40,10 @@
           />
         </div>
         <ShowArea
-          :showImages="modelData['showImages']"
+          :showAreaData="{
+            images: modelData.detialData['show_images'],
+            bindName: 'imageUrl',
+          }"
           class="centered lr-padding"
         ></ShowArea>
       </el-col>
@@ -74,7 +77,9 @@
         <a
           href="javascript:void(0);"
           class="clear upload-btn"
-          @click="imageClear(), stopAxios()"
+          @click="imageClear(clearStrs = ['imageUrl', 'targetImageUrl'],
+            clearRefNames = ['filebutton'],
+            clearLoadingTokens = ['isLoading', 'isLoading2']), stopAxios()"
           >{{ $t("message.clear") }}</a
         >
       </el-col>
@@ -109,7 +114,7 @@ export default {
       targetImageUrl: "",
       isLoading: false,
       isLoading2: false,
-      modelResult: "",
+      // modelResult: "",
       argData: "",
     };
   },
@@ -131,13 +136,6 @@ export default {
         this.source.cancel("Operation canceled by the user.");
       }
     },
-    imageClear() {
-      (this.imageUrl = ""), (this.$refs.filebutton.value = "");
-      this.isLoading = false;
-      this.isLoading2 = false;
-      this.modelResult = "";
-      this.targetImageUrl = "";
-    },
     submit() {
       if (this.imageUrl == "") {
         this.$message({
@@ -147,7 +145,7 @@ export default {
       } else {
         this.targetImageUrl = "";
         this.isLoading2 = true;
-        this.modelResult = "";
+        // this.modelResult = "";
         let post_data = {
           local_image_url: this.imageUrl.split("=")[1],
           conda_env: this.modelData.condaEnv,
@@ -220,9 +218,8 @@ export default {
       // console.log("father was called!"); // 打印结果 = '传递的参数'
     });
     this.$eventBus.$on("addShowImage", function (data) {
-      that.imageClear();
-      that.imageUrl = data;
-      console.log(data); // 打印结果 = '传递的参数'
+      that[data.bindName] = data.showImageUrl;
+
     });
     this.$eventBus.$on("transferArgData", function (trans_data) {
       that.argData = trans_data;

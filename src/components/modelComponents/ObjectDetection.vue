@@ -1,8 +1,5 @@
 <template>
   <div>
-    <!-- <h1>ip</h1>
-    <h2>{{ modelData.modelType }}->{{ modelData.modelId }}</h2> -->
-    <!-- <h1>{{ modelData }}</h1> -->
 
     <el-row class="show-wrap">
       <el-col
@@ -46,7 +43,10 @@
           />
         </div>
         <ShowArea
-          :showImages="modelData['showImages']"
+          :showAreaData="{
+            images: modelData.detialData['show_images'],
+            bindName: 'imageUrl',
+          }"
           class="centered lr-padding"
         ></ShowArea>
       </el-col>
@@ -60,7 +60,6 @@
       >
         <p class="model-inout-tittle">{{ $t("message.result") }}</p>
         <div>
-          <!-- <p v-show="isLoading2">uploading......</p> -->
           <LoadingAnimationVue v-show="isLoading2"></LoadingAnimationVue>
 
           <vue-viewer
@@ -70,13 +69,10 @@
             class="source-image"
           >
           </vue-viewer>
-          <!-- {{ modelResult }} -->
         </div>
-        <!-- <img :src="imageUrl" alt="" /> -->
       </el-col>
     </el-row>
-    <!-- {{ typeof(modelData.args) }}
-    {{ modelData.args }} -->
+
     <el-row
       :gutter="10"
       v-if="
@@ -137,7 +133,9 @@
         <a
           href="javascript:void(0);"
           class="clear upload-btn"
-          @click="imageClear(), stopAxios()"
+          @click="imageClear(clearStrs = ['imageUrl', 'targetImageUrl'],
+            clearRefNames = ['filebutton'],
+            clearLoadingTokens = ['isLoading', 'isLoading2']), stopAxios()"
           >{{ $t("message.clear") }}</a
         >
       </el-col>
@@ -171,7 +169,7 @@ export default {
       targetImageUrl: "",
       isLoading: false,
       isLoading2: false,
-      modelResult: "",
+      // modelResult: "",
     };
   },
   methods: {
@@ -196,13 +194,7 @@ export default {
         this.source.cancel("Operation canceled by the user.");
       }
     },
-    imageClear() {
-      (this.imageUrl = ""), (this.$refs.filebutton.value = "");
-      this.isLoading = false;
-      this.isLoading2 = false;
-      this.modelResult = "";
-      this.targetImageUrl = "";
-    },
+
     submit() {
       if (this.imageUrl == "") {
         this.$message({
@@ -212,7 +204,7 @@ export default {
       } else {
         this.targetImageUrl = "";
         this.isLoading2 = true;
-        this.modelResult = "";
+        // this.modelResult = "";
         let post_data = {
           local_image_url: this.imageUrl.split("=")[1],
           conda_env: this.modelData.condaEnv,
@@ -281,9 +273,8 @@ export default {
       // console.log("father was called!"); // 打印结果 = '传递的参数'
     });
     this.$eventBus.$on("addShowImage", function (data) {
-      that.imageClear();
-      that.imageUrl = data;
-      console.log(data); // 打印结果 = '传递的参数'
+      that[data.bindName] = data.showImageUrl;
+
     });
   },
 };

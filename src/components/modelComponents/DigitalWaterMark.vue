@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- {{ watermarkUrl }}{{imageUrl}} -->
     {{ this["imageUrl"] }}
     <el-row class="show-wrap">
       <!-- input -->
@@ -37,17 +36,13 @@
             @change="fileChange('filebutton', 'imageUrl', 'isLoading')"
           />
         </div>
-        <!-- <ShowArea
-          :showImages="modelData['showImages']"
-          class="centered lr-padding"
-        ></ShowArea> -->
-        <ShowArea2
+        <ShowArea
           :showAreaData="{
-            images: modelData.showImages,
+            images: modelData.detialData['show_images'],
             bindName: 'imageUrl',
           }"
           class="centered lr-padding"
-        ></ShowArea2>
+        ></ShowArea>
       </el-col>
       <!-- input -->
       <el-col :xs="24" :sm="4" :md="4" :lg="4" :xl="4" class="model-left-wrap">
@@ -89,17 +84,14 @@
             "
           />
         </div>
-        <!-- <ShowArea
-          :showImages="modelData.detialData.watermark_images"
-          class="centered lr-padding"
-        ></ShowArea> -->
-        <ShowArea2
+
+        <ShowArea
           :showAreaData="{
-            images: modelData.detialData.watermark_images,
+            images: modelData.detialData['watermark_images'],
             bindName: 'watermarkUrl',
           }"
           class="centered lr-padding"
-        ></ShowArea2>
+        ></ShowArea>
       </el-col>
       <!-- output -->
       <el-col
@@ -188,7 +180,7 @@
           @click="
             imageClear(
               (clearStrs = ['imageUrl','watermarkUrl', 'modelResult', 'targetImageUrl']),
-              (clearRefNames = ['filebutton']),
+              (clearRefNames = ['filebutton','filebutton_watermark']),
               (clearLoadingTokens = ['isLoading', 'isLoading2','isLoadingWatermark'])
             ),
               stopAxios()
@@ -212,13 +204,12 @@
 <script>
 import configData from "@/assets/config.json";
 import ShowArea from "@/components/modelComponents/subComponents/ShowArea.vue";
-import ShowArea2 from "@/components/modelComponents/subComponents/ShowArea2.vue";
 import LoadingAnimationVue from "@/components/modelComponents/subComponents/LoadingAnimation.vue";
 
 export default {
   name: "segmentation",
   props: ["modelData"],
-  components: { ShowArea, ShowArea2, LoadingAnimationVue },
+  components: { ShowArea, LoadingAnimationVue },
 
   data() {
     return {
@@ -243,7 +234,7 @@ export default {
 
     moveClick(fileRefName) {
       this.$nextTick(() => {
-        console.log(fileRefName, this.$refs[fileRefName]);
+        // console.log(fileRefName, this.$refs[fileRefName]);
         this.$refs[fileRefName].dispatchEvent(new MouseEvent("click"));
       });
     },
@@ -254,21 +245,6 @@ export default {
       }
     },
 
-    imageClear(
-      clearStrs = ["imageUrl", "modelResult", "targetImageUrl"],
-      clearRefNames = ["filebutton"],
-      clearLoadingTokens = ["isLoading", "isLoading2"]
-    ) {
-      for (var str of clearStrs) {
-        this[str] = "";
-      }
-      for (var refName of clearRefNames) {
-        this.$refs[refName].value = "";
-      }
-      for (var loadingToken of clearLoadingTokens) {
-        this[loadingToken] = false;
-      }
-    },
     submit() {
       if (this.imageUrl == "") {
         this.$message({
@@ -346,11 +322,8 @@ export default {
       that.moveClick();
       // console.log("father was called!"); // 打印结果 = '传递的参数'
     });
-    this.$eventBus.$on("addShowImage2", function (data) {
-      // that.imageClear();
+    this.$eventBus.$on("addShowImage", function (data) {
       that[data.bindName] = data.showImageUrl;
-      // that.imageUrl = data;
-      console.log(data); // 打印结果 = '传递的参数'
     });
   },
 };
