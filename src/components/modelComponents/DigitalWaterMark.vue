@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- {{ watermarkUrl }}{{imageUrl}} -->
-    {{this['imageUrl']}}
+    {{ this["imageUrl"] }}
     <el-row class="show-wrap">
       <!-- input -->
       <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8" class="model-left-wrap">
@@ -17,7 +17,7 @@
           id="drop-area"
           class="input-wrap"
           v-show="imageUrl == ''"
-          @click="moveClick()"
+          @click="moveClick('filebutton')"
         >
           <img src="@/assets/ui/默认图片@2x.png" alt="" />
           <p class="input-help" v-show="isLoading == false">
@@ -34,13 +34,20 @@
             ref="filebutton"
             type="file"
             v-show="0"
-            @change="fileChange2('filebutton','imageUrl')"
+            @change="fileChange('filebutton', 'imageUrl', 'isLoading')"
           />
         </div>
-        <ShowArea
+        <!-- <ShowArea
           :showImages="modelData['showImages']"
           class="centered lr-padding"
-        ></ShowArea>
+        ></ShowArea> -->
+        <ShowArea2
+          :showAreaData="{
+            images: modelData.showImages,
+            bindName: 'imageUrl',
+          }"
+          class="centered lr-padding"
+        ></ShowArea2>
       </el-col>
       <!-- input -->
       <el-col :xs="24" :sm="4" :md="4" :lg="4" :xl="4" class="model-left-wrap">
@@ -56,7 +63,7 @@
           id="drop-area"
           class="input-wrap"
           v-show="watermarkUrl == ''"
-          @click="moveClick2('filebutton_watermark')"
+          @click="moveClick('filebutton_watermark')"
         >
           <img src="@/assets/ui/默认图片@2x.png" alt="" />
           <p class="input-help" v-show="isLoadingWatermark == false">
@@ -73,13 +80,26 @@
             ref="filebutton_watermark"
             type="file"
             v-show="0"
-            @change="fileChange2('filebutton_watermark','watermarkUrl')"
+            @change="
+              fileChange(
+                'filebutton_watermark',
+                'watermarkUrl',
+                'isLoadingWatermark'
+              )
+            "
           />
         </div>
-        <ShowArea
+        <!-- <ShowArea
           :showImages="modelData.detialData.watermark_images"
           class="centered lr-padding"
-        ></ShowArea>
+        ></ShowArea> -->
+        <ShowArea2
+          :showAreaData="{
+            images: modelData.detialData.watermark_images,
+            bindName: 'watermarkUrl',
+          }"
+          class="centered lr-padding"
+        ></ShowArea2>
       </el-col>
       <!-- output -->
       <el-col
@@ -165,7 +185,14 @@
         <a
           href="javascript:void(0);"
           class="clear upload-btn"
-          @click="imageClear(), stopAxios()"
+          @click="
+            imageClear(
+              (clearStrs = ['imageUrl','watermarkUrl', 'modelResult', 'targetImageUrl']),
+              (clearRefNames = ['filebutton']),
+              (clearLoadingTokens = ['isLoading', 'isLoading2','isLoadingWatermark'])
+            ),
+              stopAxios()
+          "
           >{{ $t("message.clear") }}</a
         >
       </el-col>
@@ -185,12 +212,13 @@
 <script>
 import configData from "@/assets/config.json";
 import ShowArea from "@/components/modelComponents/subComponents/ShowArea.vue";
+import ShowArea2 from "@/components/modelComponents/subComponents/ShowArea2.vue";
 import LoadingAnimationVue from "@/components/modelComponents/subComponents/LoadingAnimation.vue";
 
 export default {
   name: "segmentation",
   props: ["modelData"],
-  components: { ShowArea, LoadingAnimationVue },
+  components: { ShowArea, ShowArea2, LoadingAnimationVue },
 
   data() {
     return {
@@ -212,103 +240,34 @@ export default {
       return typeof data;
     },
     //   点击事件转移
-    moveClick() {
-      // https://blog.csdn.net/youdu0213/article/details/122825179
+
+    moveClick(fileRefName) {
       this.$nextTick(() => {
-        this.$refs.filebutton.dispatchEvent(new MouseEvent("click"));
-        // console.log(this.$refs.filebutton.files)
-      });
-    },
-    moveClick2(file_ref_name) {
-      // https://blog.csdn.net/youdu0213/article/details/122825179
-      this.$nextTick(() => {
-        this.$refs.filebutton_watermark.dispatchEvent(new MouseEvent("click"));
-        // console.log(this.$refs.filebutton.files)
+        console.log(fileRefName, this.$refs[fileRefName]);
+        this.$refs[fileRefName].dispatchEvent(new MouseEvent("click"));
       });
     },
 
-    fileChange() {
-      if (this.imageVerification(this.$refs.filebutton)) {
-        this.isLoading = true;
-        this.$nextTick(() => {
-          console.log(this.$refs.filebutton.files);
-          const formData = new FormData();
-          formData.append("image", this.$refs.filebutton.files[0]);
-          this.$axios
-            .post(this.baseUrl + "upload", formData, {
-              "Content-type": "multipart/form-data",
-            })
-            .then(
-              (res) => {
-                console.log(res.data);
-                this.imageUrl = this.baseUrl + "absimage?path=" + res.data;
-              },
-              (err) => {
-                alert("上传图片失败！");
-                // 出现错误时的处理
-              }
-            )
-            .catch((err) => {
-              this.$message({
-                message: "上传图片失败！" + err,
-                type: "error",
-              });
-            });
-        });
-      } else {
-        this.$message({
-          message: "图片校验失败！",
-          type: "warning",
-        });
-        // console.log("图片校验失败！");
-      }
-    },
-    fileChange2(file_ref_name,image_url) {
-      if (this.imageVerification(this.$refs[file_ref_name])) {
-        this.isLoading = true;
-        this.$nextTick(() => {
-          console.log(this.$refs[file_ref_name].files);
-          const formData = new FormData();
-          formData.append("image", this.$refs[file_ref_name].files[0]);
-          this.$axios
-            .post(this.baseUrl + "upload", formData, {
-              "Content-type": "multipart/form-data",
-            })
-            .then(
-              (res) => {
-                console.log(res.data);
-                console.log('this.imageurl!!!!!',image_url)
-                this[image_url] = this.baseUrl + "absimage?path=" + res.data;
-              },
-              (err) => {
-                alert("上传图片失败！");
-                // 出现错误时的处理
-              }
-            )
-            .catch((err) => {
-              this.$message({
-                message: "上传图片失败！" + err,
-                type: "error",
-              });
-            });
-        });
-      } else {
-        this.$message({
-          message: "图片校验失败！",
-          type: "warning",
-        });
-        // console.log("图片校验失败！");
-      }
-    },
     stopAxios() {
-      this.source.cancel("Operation canceled by the user.");
+      if (undefined != this.source) {
+        this.source.cancel("Operation canceled by the user.");
+      }
     },
-    imageClear() {
-      (this.imageUrl = ""), (this.$refs.filebutton.value = "");
-      this.isLoading = false;
-      this.isLoading2 = false;
-      this.modelResult = "";
-      this.targetImageUrl = "";
+
+    imageClear(
+      clearStrs = ["imageUrl", "modelResult", "targetImageUrl"],
+      clearRefNames = ["filebutton"],
+      clearLoadingTokens = ["isLoading", "isLoading2"]
+    ) {
+      for (var str of clearStrs) {
+        this[str] = "";
+      }
+      for (var refName of clearRefNames) {
+        this.$refs[refName].value = "";
+      }
+      for (var loadingToken of clearLoadingTokens) {
+        this[loadingToken] = false;
+      }
     },
     submit() {
       if (this.imageUrl == "") {
@@ -387,9 +346,10 @@ export default {
       that.moveClick();
       // console.log("father was called!"); // 打印结果 = '传递的参数'
     });
-    this.$eventBus.$on("addShowImage", function (data) {
-      that.imageClear();
-      that.imageUrl = data;
+    this.$eventBus.$on("addShowImage2", function (data) {
+      // that.imageClear();
+      that[data.bindName] = data.showImageUrl;
+      // that.imageUrl = data;
       console.log(data); // 打印结果 = '传递的参数'
     });
   },

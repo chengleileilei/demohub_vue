@@ -39,7 +39,7 @@
             ref="filebutton"
             type="file"
             v-show="0"
-            @change="fileChange()"
+            @change="fileChange('filebutton','imageUrl','isLoading')"
           />
         </div>
         <ShowArea
@@ -180,44 +180,11 @@ export default {
       });
     },
 
-    fileChange() {
-      if (this.imageVerification(this.$refs.filebutton)) {
-        this.isLoading = true;
-        this.$nextTick(() => {
-          console.log(this.$refs.filebutton.files);
-          const formData = new FormData();
-          formData.append("image", this.$refs.filebutton.files[0]);
-          this.$axios
-            .post(this.baseUrl + "upload", formData, {
-              "Content-type": "multipart/form-data",
-            })
-            .then(
-              (res) => {
-                console.log(res.data);
-                this.imageUrl = this.baseUrl + "absimage?path=" + res.data;
-              },
-              (err) => {
-                alert("上传图片失败！");
-                // 出现错误时的处理
-              }
-            )
-            .catch((err) => {
-              this.$message({
-                message: "上传图片失败！" + err,
-                type: "error",
-              });
-            });
-        });
-      } else {
-        this.$message({
-          message: "图片校验失败！",
-          type: "warning",
-        });
-        // console.log("图片校验失败！");
-      }
-    },
+
     stopAxios() {
-      this.source.cancel("Operation canceled by the user.");
+      if (undefined != this.source) {
+        this.source.cancel("Operation canceled by the user.");
+      }
     },
     imageClear() {
       (this.imageUrl = ""), (this.$refs.filebutton.value = "");

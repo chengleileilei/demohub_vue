@@ -25,13 +25,41 @@ exports.install = function(Vue, options) {
             } else {
                 return true;
             }
+        },
+        Vue.prototype.fileChange = function(file_ref_name, image_url, loading_token) {
+            console.log("public filechange was called!!!!")
+            if (this.imageVerification(this.$refs[file_ref_name])) {
+                this[loading_token] = true;
+                this.$nextTick(() => {
+                    const formData = new FormData();
+                    formData.append("image", this.$refs[file_ref_name].files[0]);
+                    this.$axios
+                        .post(this.baseUrl + "upload", formData, {
+                            "Content-type": "multipart/form-data",
+                        })
+                        .then(
+                            (res) => {
+                                // console.log(res.data);
+                                this[image_url] = this.baseUrl + "absimage?path=" + res.data;
+                            },
+                            (err) => {
+                                alert("上传图片失败！");
+                                // 出现错误时的处理
+                            }
+                        )
+                        .catch((err) => {
+                            this.$message({
+                                message: "上传图片失败！" + err,
+                                type: "error",
+                            });
+                        });
+                });
+            } else {
+                this.$message({
+                    message: "图片校验失败！",
+                    type: "warning",
+                });
+                // console.log("图片校验失败！");
+            }
         }
-        // ,
-        // Vue.prototype.imageClear = function() {
-        //     (this.imageUrl = ""), (this.$refs.filebutton.value = "");
-        //     this.isLoading = false;
-        //     this.isLoading2 = false;
-        //     this.modelResult = "";
-        //     this.falseShow = false;
-        // }
 }
