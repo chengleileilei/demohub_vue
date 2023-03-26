@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{ this["imageUrl"] }}
+    <!-- {{ this["imageUrl"] }} -->
     <el-row class="show-wrap">
       <!-- input -->
       <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8" class="model-left-wrap">
@@ -46,7 +46,7 @@
       </el-col>
       <!-- input -->
       <el-col :xs="24" :sm="4" :md="4" :lg="4" :xl="4" class="model-left-wrap">
-        <p class="model-inout-tittle">{{ $t("message.input_image") }}</p>
+        <p class="model-inout-tittle">{{ $t("message.input_watermark") }}</p>
         <vue-viewer
           v-show="watermarkUrl != ''"
           :thumb="watermarkUrl"
@@ -179,9 +179,18 @@
           class="clear upload-btn"
           @click="
             imageClear(
-              (clearStrs = ['imageUrl','watermarkUrl', 'modelResult', 'targetImageUrl']),
-              (clearRefNames = ['filebutton','filebutton_watermark']),
-              (clearLoadingTokens = ['isLoading', 'isLoading2','isLoadingWatermark'])
+              (clearStrs = [
+                'imageUrl',
+                'watermarkUrl',
+                'modelResult',
+                'targetImageUrl',
+              ]),
+              (clearRefNames = ['filebutton', 'filebutton_watermark']),
+              (clearLoadingTokens = [
+                'isLoading',
+                'isLoading2',
+                'isLoadingWatermark',
+              ])
             ),
               stopAxios()
           "
@@ -194,6 +203,124 @@
           class="submit upload-btn"
           :class="{ 'submit-forbidden': isLoading2 == true }"
           @click="submit()"
+          >{{ $t("message.submit") }}</a
+        >
+      </el-col>
+            <el-col :xs="12" :sm="6" :md="6" :lg="6" :xl="6">
+        <a
+          href="javascript:void(0);"
+          class="submit upload-btn"
+          :class="{ 'submit-forbidden': isLoading2 == true }"
+          @click="extractInputImageUrl = targetImageUrl"
+          >{{ $t("message.trans_embed_image") }}</a
+        >
+      </el-col>
+    </el-row>
+
+    <!-- extract -->
+    <el-row class="show-wrap">
+      <!-- input -->
+      <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8" class="model-left-wrap">
+        <p class="model-inout-tittle">{{ $t("message.input_image") }}</p>
+        <vue-viewer
+          v-show="extractInputImageUrl != ''"
+          :thumb="extractInputImageUrl"
+          :full="extractInputImageUrl"
+          class="source-image"
+        >
+        </vue-viewer>
+        <div
+          id="drop-area"
+          class="input-wrap"
+          v-show="extractInputImageUrl == ''"
+          @click="moveClick('filebutton_embeded_img')"
+        >
+          <img src="@/assets/ui/默认图片@2x.png" alt="" />
+          <p class="input-help" v-show="isLoadingExtractInput == false">
+            {{ $t("message.drop_image") }}
+          </p>
+          <p class="input-help" v-show="isLoadingExtractInput == false">
+            {{ $t("message.or") }}
+          </p>
+          <p class="input-help" v-show="isLoadingExtractInput == false">
+            {{ $t("message.click_upload") }}
+          </p>
+          <p v-show="isLoadingExtractInput">uploading......</p>
+          <input
+            ref="filebutton_embeded_img"
+            type="file"
+            v-show="0"
+            @change="
+              fileChange(
+                'filebutton_embeded_img',
+                'extractInputImageUrl',
+                'isLoadingExtractInput'
+              )
+            "
+          />
+        </div>
+        <ShowArea
+          :showAreaData="{
+            images: modelData.detialData['show_images'],
+            bindName: 'extractInputImageUrl',
+          }"
+          class="centered lr-padding"
+        ></ShowArea>
+      </el-col>
+
+      <!-- output -->
+      <el-col
+        :xs="24"
+        :sm="12"
+        :md="12"
+        :lg="12"
+        :xl="12"
+        class="model-right-wrap"
+      >
+        <p class="model-inout-tittle">{{ $t("message.result") }}</p>
+        <div>
+          <LoadingAnimationVue
+            v-show="isLoadingExtractOutput"
+          ></LoadingAnimationVue>
+
+          <vue-viewer
+            v-show="extractOutputWatermarkUrl != ''"
+            :thumb="extractOutputWatermarkUrl"
+            :full="extractOutputWatermarkUrl"
+            class="source-image"
+          >
+          </vue-viewer>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row :gutter="10">
+      <el-col :xs="12" :sm="6" :md="6" :lg="6" :xl="6">
+        <a
+          href="javascript:void(0);"
+          class="clear upload-btn"
+          @click="
+            imageClear(
+              (clearStrs = [
+                'extractInputImageUrl',
+                'extractOutputWatermarkUrl',
+              ]),
+              (clearRefNames = ['filebutton_embeded_img']),
+              (clearLoadingTokens = [
+                'isLoadingExtractOutput',
+                'isLoadingWatermark',
+              ])
+            ),
+              stopAxios()
+          "
+          >{{ $t("message.clear") }}</a
+        >
+      </el-col>
+      <el-col :xs="12" :sm="6" :md="6" :lg="6" :xl="6">
+        <a
+          href="javascript:void(0);"
+          class="submit upload-btn"
+          :class="{ 'submit-forbidden': isLoadingExtractOutput == true }"
+          @click="submit_extact()"
           >{{ $t("message.submit") }}</a
         >
       </el-col>
@@ -218,12 +345,14 @@ export default {
       watermarkUrl: "",
       targetImageUrl: "",
 
-      embededImageUrl: "",
-      extractedWatermarkUrl: "",
+      extractInputImageUrl: "",
+      extractOutputWatermarkUrl: "",
       isLoading: false,
       isLoadingWatermark: false,
       isLoading2: false,
-      modelResult: "",
+
+      isLoadingExtractInput: false,
+      isLoadingExtractOutput: false,
     };
   },
   methods: {
@@ -244,6 +373,11 @@ export default {
         this.source.cancel("Operation canceled by the user.");
       }
     },
+        stopAxios2() {
+      if (undefined != this.source2) {
+        this.source2.cancel("Operation canceled by the user.");
+      }
+    },
 
     submit() {
       if (this.imageUrl == "") {
@@ -251,12 +385,17 @@ export default {
           message: "请先上传图片！",
           type: "warning",
         });
+      } else if (this.watermarkUrl == "") {
+        this.$message({
+          message: "请先上传水印！",
+          type: "warning",
+        });
       } else {
         this.targetImageUrl = "";
         this.isLoading2 = true;
-        this.modelResult = "";
         let post_data = {
           local_image_url: this.imageUrl.split("=")[1],
+          local_watermark_url: this.watermarkUrl.split("=")[1],
           conda_env: this.modelData.condaEnv,
           args: {},
           classname: this.modelData.modelType,
@@ -266,24 +405,70 @@ export default {
           post_data["args"][arg_name] =
             this.modelData.args[arg_name]["default"];
         }
-        // console.log(post_data["local_image_url"]);
+        console.log(post_data);
         this.CancelToken = this.$axios.CancelToken;
         this.source = this.CancelToken.source();
         this.$axios
-          .post(this.baseUrl + "submit", post_data, {
+          .post(this.baseUrl + "watermark/embed", post_data, {
             cancelToken: this.source.token,
           })
           .then((res) => {
-            console.log("kkkkres:", res);
+            console.log("post res:", res);
             let target_url = res.data[res.data.length - 1];
             target_url = target_url.split(" ");
             target_url = target_url[target_url.length - 1];
             target_url = this.baseUrl + "absimage?path=" + target_url;
             this.targetImageUrl = target_url;
+            // this.extractInputImageUrl = this.targetImageUrl
             this.isLoading2 = false;
           })
           .catch((err) => {
             this.isLoading2 = false;
+            this.$message({
+              message: err,
+              type: "error",
+            });
+          });
+      }
+    },
+    submit_extact() {
+      if (this.extractInputImageUrl == "") {
+        this.$message({
+          message: "请先上传图片！",
+          type: "warning",
+        });
+      } else {
+        this.extractOutputWatermarkUrl = "";
+        this.isLoadingExtractOutput = true;
+        let post_data = {
+          local_image_url: this.extractInputImageUrl.split("=")[1],
+          conda_env: this.modelData.condaEnv,
+          args: {},
+          classname: this.modelData.modelType,
+          demoname: this.modelData.modelId,
+        };
+        for (var arg_name in this.modelData.args) {
+          post_data["args"][arg_name] =
+            this.modelData.args[arg_name]["default"];
+        }
+        console.log(post_data);
+        this.CancelToken2 = this.$axios.CancelToken;
+        this.source2 = this.CancelToken2.source();
+        this.$axios
+          .post(this.baseUrl + "watermark/extract", post_data, {
+            cancelToken: this.source2.token,
+          })
+          .then((res) => {
+            console.log("post res:", res);
+            let target_url = res.data[res.data.length - 1];
+            target_url = target_url.split(" ");
+            target_url = target_url[target_url.length - 1];
+            target_url = this.baseUrl + "absimage?path=" + target_url;
+            this.extractOutputWatermarkUrl = target_url;
+            this.isLoadingExtractOutput = false;
+          })
+          .catch((err) => {
+            this.isLoadingExtractOutput = false;
             this.$message({
               message: err,
               type: "error",

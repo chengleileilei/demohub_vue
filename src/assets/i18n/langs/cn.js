@@ -15,7 +15,11 @@ const cn = {
         result: "输出结果：",
         drop_image: "拖动图片",
         or: "- 或 -",
-        click_upload: "点击上传"
+        click_upload: "点击上传",
+        input_watermark: "输入水印",
+        trans_embed_image: "导入到提取模型"
+
+
     },
     footer: {
         authors: "网站作者",

@@ -12,10 +12,15 @@ const en = {
         clear: "Clear",
         submit: "Submit",
         input_image: "Input Image: ",
+
         result: "Result: ",
         drop_image: "Drop Image Here",
         or: "- OR -",
-        click_upload: "Click to Upload"
+        click_upload: "Click to Upload",
+        input_watermark: "Input Watermark",
+        trans_embed_image: "import to extract model"
+
+
     },
     footer: {
         authors: "Authors",
