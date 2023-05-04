@@ -161,7 +161,8 @@ export default {
         //   post_data["args"][arg_name] =
         //     this.modelData.args[arg_name]["default"];
         // }
-        // console.log(post_data["local_image_url"]);
+        console.log("post data: ",post_data);
+
         this.CancelToken = this.$axios.CancelToken;
         this.source = this.CancelToken.source();
         this.$axios
@@ -169,7 +170,7 @@ export default {
             cancelToken: this.source.token,
           })
           .then((res) => {
-            console.log("kkkkres:", res);
+            // console.log("kkkkres:", res);
             let target_url = res.data[res.data.length - 1];
             target_url = target_url.split(" ");
             target_url = target_url[target_url.length - 1];
@@ -217,6 +218,7 @@ export default {
       that.moveClick();
       // console.log("father was called!"); // 打印结果 = '传递的参数'
     });
+    
     this.$eventBus.$on("addShowImage", function (data) {
       that[data.bindName] = data.showImageUrl;
 

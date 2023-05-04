@@ -1,9 +1,11 @@
 <template>
   <div>
     <!-- {{ this["imageUrl"] }} -->
+        <h2>Embed:</h2>
+
     <el-row class="show-wrap">
       <!-- input -->
-      <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8" class="model-left-wrap">
+      <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8" class="model-left-wrap2">
         <p class="model-inout-tittle">{{ $t("message.input_image") }}</p>
         <vue-viewer
           v-show="imageUrl != ''"
@@ -45,7 +47,7 @@
         ></ShowArea>
       </el-col>
       <!-- input -->
-      <el-col :xs="24" :sm="4" :md="4" :lg="4" :xl="4" class="model-left-wrap">
+      <el-col :xs="24" :sm="4" :md="4" :lg="4" :xl="4" class="model-left-wrap2">
         <p class="model-inout-tittle">{{ $t("message.input_watermark") }}</p>
         <vue-viewer
           v-show="watermarkUrl != ''"
@@ -218,9 +220,10 @@
     </el-row>
 
     <!-- extract -->
+    <h2>Extract:</h2>
     <el-row class="show-wrap">
       <!-- input -->
-      <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8" class="model-left-wrap">
+      <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="model-left-wrap">
         <p class="model-inout-tittle">{{ $t("message.input_image") }}</p>
         <vue-viewer
           v-show="extractInputImageUrl != ''"
@@ -521,6 +524,10 @@ export default {
   overflow: hidden;
 }
 .model-left-wrap {
+  padding: 20px 20px 20px 20px;
+  background: #ffffff;
+}
+.model-left-wrap2 {
   padding: 20px 5px 20px 5px;
   background: #ffffff;
 }

@@ -52,7 +52,6 @@ export default {
     };
   },
   methods: {
-
     // 组件间通信
     transferArgData(trans_data) {
       this.$eventBus.$emit("transferArgData", trans_data);
@@ -85,6 +84,10 @@ export default {
       break;
     }
     this.updataPostData();
+
+    this.$nextTick(() => {
+      this.transferArgData({ funName: this.funName, postData: this.postData });
+    });
   },
 };
 </script>

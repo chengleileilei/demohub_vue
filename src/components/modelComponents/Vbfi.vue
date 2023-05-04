@@ -1,5 +1,9 @@
 <template>
   <div class="iframe-container">
+    <!-- <img src="@/assets/vbfi/vbfi_res.png" alt=""> -->
+    <img src="@/assets/vbfi/vbfi_start.png" alt="">
+
+
     <!-- <iframe src="http://demohub.bjtu.edu.cn:8080/" scrolling='auto' frameborder="0"></iframe> -->
   </div>
 </template>
@@ -17,7 +21,7 @@ export default {
 
 <style>
 .iframe-container {
-	height:1200px;
+	min-height:400px;
 	overflow:hidden
 }
 .iframe-container * {

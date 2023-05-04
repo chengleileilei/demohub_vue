@@ -10,7 +10,7 @@
           <div class="logo-tittle-wrap">
             <p class="logo-tittle-up">Demo<span class="yellow">Hub</span></p>
             <p class="logo-tittle-down">
-              Try state-of-the-art computer visons models
+              Home of Ai algorithoms
             </p>
           </div>
         </div>
