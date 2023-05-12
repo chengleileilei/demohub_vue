@@ -42,7 +42,7 @@
             ref="filebutton"
             type="file"
             v-show="0"
-            @change="fileChange('filebutton','imageUrl','isLoading')"
+            @change="fileChange('filebutton', 'imageUrl', 'isLoading')"
           />
         </div>
         <ShowArea
@@ -140,9 +140,14 @@
         <a
           href="javascript:void(0);"
           class="clear upload-btn"
-          @click="imageClear(clearStrs = ['imageUrl', 'targetImageUrl'],
-            clearRefNames = ['filebutton'],
-            clearLoadingTokens = ['isLoading', 'isLoading2']), stopAxios()"
+          @click="
+            imageClear(
+              (clearStrs = ['imageUrl', 'targetImageUrl']),
+              (clearRefNames = ['filebutton']),
+              (clearLoadingTokens = ['isLoading', 'isLoading2'])
+            ),
+              stopAxios()
+          "
           >{{ $t("message.clear") }}</a
         >
       </el-col>
@@ -192,7 +197,6 @@ export default {
       });
     },
 
-
     stopAxios() {
       if (undefined != this.source) {
         this.source.cancel("Operation canceled by the user.");
@@ -231,11 +235,17 @@ export default {
             let target_url = res.data[0];
             target_url = target_url.split(" ");
             target_url = target_url[target_url.length - 1];
+            // target_url =
+            //   this.baseUrl +
+            //   // this.configData.source_image_api +
+            //   "absimage?path=" +
+            //   target_url;
             target_url =
               this.baseUrl +
-              // this.configData.source_image_api +
               "absimage?path=" +
-              target_url;
+              target_url +
+              "&t=" +
+              Math.random();
             this.targetImageUrl = target_url;
             // this.modelResult = target_url;
             console.log("res=>", res);
@@ -283,7 +293,6 @@ export default {
     });
     this.$eventBus.$on("addShowImage", function (data) {
       that[data.bindName] = data.showImageUrl;
-
     });
   },
 };
@@ -336,12 +345,12 @@ export default {
   font-weight: 400;
   color: #333333;
 }
-.source-image>img{
+.source-image > img {
   margin-top: 15px;
   width: 100%;
   border-radius: 16px;
   height: auto;
-  margin:0;
+  margin: 0;
   cursor: zoom-in;
 }
 .upload-btn {
