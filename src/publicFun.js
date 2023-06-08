@@ -13,7 +13,7 @@ exports.install = function(Vue, options) {
                 suffix != "jpeg" &&
                 suffix != "png"
             ) {
-                alert("仅支持jpg、jpeg、gif格式图片！"); //不是图片，做处理
+                alert("仅支持jpg、jpeg、png、gif格式图片！"); //不是图片，做处理
                 return false;
             }
             var fileSize = 0; //文件大小默认为0
