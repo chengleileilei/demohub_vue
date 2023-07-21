@@ -232,24 +232,27 @@ export default {
             cancelToken: this.source.token,
           })
           .then((res) => {
-            let target_url = res.data[0];
-            target_url = target_url.split(" ");
-            target_url = target_url[target_url.length - 1];
-            // target_url =
-            //   this.baseUrl +
-            //   // this.configData.source_image_api +
-            //   "absimage?path=" +
-            //   target_url;
-            target_url =
-              this.baseUrl +
-              "absimage?path=" +
-              target_url +
-              "&t=" +
-              Math.random();
-            this.targetImageUrl = target_url;
-            // this.modelResult = target_url;
-            console.log("res=>", res);
-            this.isLoading2 = false;
+                        if (res.data == false) {
+              this.$message({
+                message: "服务器繁忙，请稍后提交！",
+                type: "error",
+              });
+            }else{
+
+              let target_url = res.data[0];
+              target_url = target_url.split(" ");
+              target_url = target_url[target_url.length - 1];
+              target_url =
+                this.baseUrl +
+                "absimage?path=" +
+                target_url +
+                "&t=" +
+                Math.random();
+              this.targetImageUrl = target_url;
+              // this.modelResult = target_url;
+              console.log("res=>", res);
+              this.isLoading2 = false;
+            }
           })
           .catch((err) => {
             this.isLoading2 = false;

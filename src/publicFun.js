@@ -19,8 +19,8 @@ exports.install = function(Vue, options) {
             var fileSize = 0; //文件大小默认为0
             /*获取文件大小，以Kb为单位*/
             fileSize = file.files[0].size / 1024;
-            if (fileSize > 10000) {
-                alert("您选择的图片太大，请选择小于10M的图片");
+            if (fileSize > 5000) {
+                alert("您选择的图片太大，请选择小于5M的图片");
                 return flase;
             } else {
                 return true;

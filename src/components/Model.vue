@@ -69,7 +69,7 @@ export default {
     augmentations: () =>
       import("@/components/modelComponents/Augmentations.vue"),
     vbfi: () => import("@/components/modelComponents/Vbfi.vue"),
-    digital_watermark: () =>!
+    digital_watermark: () =>
       import("@/components/modelComponents/DigitalWaterMark.vue"),
     diffusion: () =>
       import("@/components/modelComponents/Diffusion.vue"),

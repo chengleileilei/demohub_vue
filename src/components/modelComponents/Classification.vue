@@ -256,6 +256,11 @@ export default {
             this.modelResult = eval(res.data);
             if (this.modelResult == false) {
               this.falseShow = true;
+              this.$message({
+                message: "服务器繁忙，请稍后提交！",
+                type: "error",
+              });
+            
             }
             console.log("res=>", res);
             this.isLoading2 = false;

@@ -224,13 +224,20 @@ export default {
             cancelToken: this.source.token,
           })
           .then((res) => {
-            console.log("kkkkres:", res);
-            let target_url = res.data[res.data.length - 1];
-            target_url = target_url.split(" ");
-            target_url = target_url[target_url.length - 1];
-            target_url = this.baseUrl + "absimage?path=" + target_url + "&t=" + Math.random(); // 设置随机数，让浏览器重新请求图片，解决相同url图片不刷新问题
-            this.targetImageUrl = target_url;
-            this.isLoading2 = false;
+                        if (res.data == false) {
+              this.$message({
+                message: "服务器繁忙，请稍后提交！",
+                type: "error",
+              });
+            }else{
+              let target_url = res.data[res.data.length - 1];
+              target_url = target_url.split(" ");
+              target_url = target_url[target_url.length - 1];
+              target_url = this.baseUrl + "absimage?path=" + target_url + "&t=" + Math.random(); // 设置随机数，让浏览器重新请求图片，解决相同url图片不刷新问题
+              this.targetImageUrl = target_url;
+              this.isLoading2 = false;
+            }
+            // console.log("kkkkres:", res);
           })
           .catch((err) => {
             this.isLoading2 = false;

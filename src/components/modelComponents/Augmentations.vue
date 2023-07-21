@@ -11,8 +11,13 @@
       >
         <p class="model-inout-tittle">{{ $t("message.input_image") }}</p>
         <!-- <img :src="imageUrl" alt="" class="source-image" /> -->
-        
-        <vue-viewer v-show="imageUrl!=''" :thumb="imageUrl" :full="imageUrl" class="source-image">
+
+        <vue-viewer
+          v-show="imageUrl != ''"
+          :thumb="imageUrl"
+          :full="imageUrl"
+          class="source-image"
+        >
         </vue-viewer>
 
         <div
@@ -36,7 +41,7 @@
             ref="filebutton"
             type="file"
             v-show="0"
-            @change="fileChange('filebutton','imageUrl','isLoading')"
+            @change="fileChange('filebutton', 'imageUrl', 'isLoading')"
           />
         </div>
         <ShowArea
@@ -58,8 +63,13 @@
         <p class="model-inout-tittle">{{ $t("message.result") }}</p>
         <div>
           <LoadingAnimationVue v-show="isLoading2"></LoadingAnimationVue>
-        <vue-viewer v-show="targetImageUrl!=''" :thumb="targetImageUrl" :full="targetImageUrl" class="source-image">
-        </vue-viewer>
+          <vue-viewer
+            v-show="targetImageUrl != ''"
+            :thumb="targetImageUrl"
+            :full="targetImageUrl"
+            class="source-image"
+          >
+          </vue-viewer>
           <!-- <img
             :src="targetImageUrl"
             v-show="targetImageUrl != ''"
@@ -77,9 +87,14 @@
         <a
           href="javascript:void(0);"
           class="clear upload-btn"
-          @click="imageClear(clearStrs = ['imageUrl', 'targetImageUrl'],
-            clearRefNames = ['filebutton'],
-            clearLoadingTokens = ['isLoading', 'isLoading2']), stopAxios()"
+          @click="
+            imageClear(
+              (clearStrs = ['imageUrl', 'targetImageUrl']),
+              (clearRefNames = ['filebutton']),
+              (clearLoadingTokens = ['isLoading', 'isLoading2'])
+            ),
+              stopAxios()
+          "
           >{{ $t("message.clear") }}</a
         >
       </el-col>
@@ -155,13 +170,14 @@ export default {
         };
         // 构造模型参数
         post_data["args"]["funName"] = this.argData["funName"];
-        post_data["args"]["funArgs"] = '"' + this.argData["postData"] + '"';
+        // post_data["args"]["funArgs"] = '"' + this.argData["postData"] + '"';
+        post_data["args"]["funArgs"] = this.argData["postData"];
 
         // for (var arg_name in this.modelData.args) {
         //   post_data["args"][arg_name] =
         //     this.modelData.args[arg_name]["default"];
         // }
-        console.log("post data: ",post_data);
+        // console.log("post data: ", post_data);
 
         this.CancelToken = this.$axios.CancelToken;
         this.source = this.CancelToken.source();
@@ -170,14 +186,26 @@ export default {
             cancelToken: this.source.token,
           })
           .then((res) => {
-            // console.log("kkkkres:", res);
-            let target_url = res.data[res.data.length - 1];
-            target_url = target_url.split(" ");
-            target_url = target_url[target_url.length - 1];
-            target_url = this.baseUrl + "absimage?path=" + target_url + "&t=" + Math.random(); // 设置随机数，让浏览器重新请求图片，解决相同url图片不刷新问题
-
-            this.targetImageUrl = target_url;
+            // console.log(res);
             this.isLoading2 = false;
+            if (res.data == false) {
+              this.$message({
+                message: "服务器繁忙，请稍后提交！",
+                type: "error",
+              });
+            } else {
+              let target_url = res.data[res.data.length - 1];
+              target_url = target_url.split(" ");
+              target_url = target_url[target_url.length - 1];
+              target_url =
+                this.baseUrl +
+                "absimage?path=" +
+                target_url +
+                "&t=" +
+                Math.random(); // 设置随机数，让浏览器重新请求图片，解决相同url图片不刷新问题
+              this.targetImageUrl = target_url;
+              this.isLoading2 = false;
+            }
           })
           .catch((err) => {
             this.isLoading2 = false;
@@ -219,10 +247,9 @@ export default {
       that.moveClick();
       // console.log("father was called!"); // 打印结果 = '传递的参数'
     });
-    
+
     this.$eventBus.$on("addShowImage", function (data) {
       that[data.bindName] = data.showImageUrl;
-
     });
     this.$eventBus.$on("transferArgData", function (trans_data) {
       that.argData = trans_data;
@@ -284,12 +311,12 @@ export default {
   width: 100%;
   border-radius: 16px;
 } */
-.source-image>img{
+.source-image > img {
   margin-top: 15px;
   width: 100%;
   border-radius: 16px;
   height: auto;
-  margin:0;
+  margin: 0;
   cursor: zoom-in;
 }
 
