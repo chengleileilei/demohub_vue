@@ -47,6 +47,7 @@ export default {
   props: ["argsData"],
   data() {
     return {
+      aug_fun:this.$route.params.fun_name,
       funName: "",
       postData: "",
     };
@@ -55,7 +56,7 @@ export default {
     // 组件间通信
     transferArgData(trans_data) {
       this.$eventBus.$emit("transferArgData", trans_data);
-      console.log("changed");
+      // console.log("changed");
     },
 
     // 更新postData
@@ -79,10 +80,21 @@ export default {
     },
   },
   created() {
-    for (var item in this.argsData) {
-      this.funName = item;
-      break;
+    if ( this.aug_fun in this.argsData){
+      this.funName = this.aug_fun;
     }
+    else{
+      for (var item in this.argsData) {
+        this.funName = item;
+        break;
+      }
+    }
+    // console.log(this.aug_fun, this.aug_fun in this.argsData)
+    // for (var item in this.argsData) {
+    //   console.log(item)
+    //   this.funName = item;
+    //   break;
+    // }
     this.updataPostData();
 
     this.$nextTick(() => {

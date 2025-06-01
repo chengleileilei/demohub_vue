@@ -12,11 +12,18 @@ export default new Router({
             path: '/',
             name: 'Index',
             component: HelloWorld
-        }, {
+        }, 
+        {
+            path:'/model/:model_type/:model_id/:fun_name', //fun_name用于匹配augmentation模型的参数，方便通过链接直接访问某个模型的某个参数
+            name:'Model',
+            component: Model
+        },
+        {
             path: '/model/:model_type/:model_id/',
             name: 'Model',
             component: Model
-        }, {
+        }, 
+        {
             path: '/model/:model_type/',
             name: 'More',
             component: More

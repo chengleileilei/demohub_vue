@@ -11,7 +11,7 @@ const messages = {
 }
 
 const i18n = new VueI18n({
-    locale: 'en', // 设置默认语言
+    locale: 'cn', // 设置默认语言
     messages
 })
 locale.i18n((key, value) => i18n.t(key, value)) //为了实现element插件的多语言切换
